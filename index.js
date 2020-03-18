@@ -229,13 +229,14 @@ app.post('/api/contributorLogin',(req,res,next)=>{
   var sql = 'SELECT `contributorPassword` FROM `contributor-login-table` WHERE `contributorId` = ?';
   mysqlConnection.query(sql, [contributorId], function (err, rows) {
     if (err) throw err;
-    if(!rows.password){
-      res.status(201).json({
-        message:"failed",
-      });
-    }
+    passwordFromDatabase = '';
     for(row of rows){
-      passwordFromDatabase = row.contributorPassword
+      passwordFromDatabase =  row.contributorPassword;
+    }
+    if(passwordFromDatabase==''){
+      res.status(201).json({
+        message:"Invalid User Id",
+      });
     }
     if(passwordFromDatabase === contributorPassword){
       const token = jwt.sign(
@@ -251,7 +252,7 @@ app.post('/api/contributorLogin',(req,res,next)=>{
     }
     else{
       res.status(201).json({
-        message:"failed",
+        message:"Invalid Password",
       });
     }
   });
