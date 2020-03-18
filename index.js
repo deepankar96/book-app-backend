@@ -235,14 +235,13 @@ app.post('/api/contributorLogin',(req,res,next)=>{
     }
     if(passwordFromDatabase==''){
       res.status(201).json({
-        message:"Invalid User Id",
+        message:"Invalid UserId",
       });
     }
-    if(passwordFromDatabase === contributorPassword){
+    else if(passwordFromDatabase === contributorPassword){
       const token = jwt.sign(
         {contributorId:contributorId},
         "secret_string_for_contributor_login",
-        {expiresIn:"10h"}
       );
       res.status(200).json({
         message:"success",
