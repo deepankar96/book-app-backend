@@ -257,6 +257,35 @@ app.post('/api/contributorLogin',(req,res,next)=>{
   });
 });
 
+app.post('/api/userLogin',(req,res,next)=>{
+  userId = req.body.userId;
+  userPassword = req.body.userPassword;
+  var sql = 'SELECT `userPassword` FROM `user-login-table` WHERE `userId` = ?';
+  mysqlConnection.query(sql, [userId], function (err, rows) {
+    if (err) throw err;
+    passwordFromDatabase = '';
+    for(row of rows){
+      passwordFromDatabase =  row.userPassword;
+    }
+    if(passwordFromDatabase==''){
+      res.status(201).json({
+        message:"Invalid UserId",
+      });
+    }
+    else if(passwordFromDatabase === userPassword){
+      res.status(200).json({
+        message:"success",
+        userId:userId,
+      });
+    }
+    else{
+      res.status(201).json({
+        message:"Invalid Password",
+      });
+    }
+  });
+});
+
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{
