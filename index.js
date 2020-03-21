@@ -239,6 +239,7 @@ app.post('/api/contributorLogin',(req,res,next)=>{
       });
     }
     else if(passwordFromDatabase === contributorPassword){
+      //Creating a json web token to verify further transactions
       const token = jwt.sign(
         {contributorId:contributorId},
         "secret_string_for_contributor_login",
@@ -257,6 +258,7 @@ app.post('/api/contributorLogin',(req,res,next)=>{
   });
 });
 
+//Login as a User
 app.post('/api/userLogin',(req,res,next)=>{
   userId = req.body.userId;
   userPassword = req.body.userPassword;
@@ -283,6 +285,24 @@ app.post('/api/userLogin',(req,res,next)=>{
         message:"Invalid Password",
       });
     }
+  });
+});
+
+
+app.post('/api/addbook',(req,res)=>{
+  const book = req.body;
+  var data = []
+  data.push(book.contributorId)
+  data.push(book.bookId)
+  data.push(book.bookName)
+  data.push(book.bookLanguage)
+  console.log(data)
+  var sql = "INSERT INTO `book-list-table` (contributorId,bookId,bookName,bookLanguage) VALUES (?)";
+  mysqlConnection.query(sql, [data], function (err, result) {
+    if (err) throw err;
+    res.status(201).json({
+      message:"success"
+    });  
   });
 });
 
