@@ -30,7 +30,7 @@ var mysqlConnection = mysql.createConnection({
     );
     res.setHeader(
       "Access-Control-Allow-Headers",
-        "Origin,X-Requested-With,Content-Type,Accept,collegeauthorization"
+        "Origin,X-Requested-With,Content-Type,Accept"
     );
     res.setHeader(
       "Access-Control-Allow-Methods",
@@ -288,7 +288,7 @@ app.post('/api/userLogin',(req,res,next)=>{
   });
 });
 
-
+//Add book to database
 app.post('/api/addbook',(req,res)=>{
   const book = req.body;
   var data = []
@@ -306,6 +306,54 @@ app.post('/api/addbook',(req,res)=>{
   });
 });
 
+//Get books form database
+app.post('/api/getBooksForContributor',(req,res)=>{
+  contributorId = req.body.contributorId;
+  books=[];
+  var sql = 'SELECT * FROM `book-list-table` where contributorId = ?';
+        mysqlConnection.query(sql, [contributorId], (err,rows) => {
+        if(err) throw err;
+        for(row of rows){
+          const book ={
+            contributorId:row.contributorId,
+            bookId:row.bookId,
+            bookName:row.bookName,
+            bookLanguage:row.bookLanguage,
+            }
+        books.push(book);
+        }
+      res.status(200).json({
+        message:"successfull",
+        post:books,
+      }
+      );
+      books = []
+      });
+});
+//Getting books according to the language
+app.post('/api/getBooksPerLanguage',(req,res)=>{
+  Language = req.body.Language;
+  books=[];
+  var sql = 'SELECT * FROM `book-list-table` where bookLanguage = ?';
+        mysqlConnection.query(sql, [Language], (err,rows) => {
+        if(err) throw err;
+        for(row of rows){
+          const book ={
+            contributorId:row.contributorId,
+            bookId:row.bookId,
+            bookName:row.bookName,
+            bookLanguage:row.bookLanguage,
+            }
+        books.push(book);
+        }
+      res.status(200).json({
+        message:"successfull",
+        post:books,
+      }
+      );
+      books = []
+      });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{
