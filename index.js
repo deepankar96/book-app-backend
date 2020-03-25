@@ -2,7 +2,6 @@ const mysql = require('mysql');
 const express = require('express')
 const bodyparser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const collegeauth = require('./middleware/college-auth');
 
 const app = express()
  
@@ -291,20 +290,33 @@ app.post('/api/userLogin',(req,res,next)=>{
 //Add book to database
 app.post('/api/addbook',(req,res)=>{
   const book = req.body;
+  bookIdentity = book.bookId
   var data = []
   data.push(book.contributorId)
   data.push(book.bookId)
   data.push(book.bookName)
   data.push(book.bookLanguage)
-  console.log(data)
   var sql = "INSERT INTO `book-list-table` (contributorId,bookId,bookName,bookLanguage) VALUES (?)";
   mysqlConnection.query(sql, [data], function (err, result) {
     if (err) throw err;
     res.status(201).json({
-      message:"success"
+      message:"success",
+      bookId:book.bookId,
     });  
   });
 });
+
+//Create book history to database
+// app.post('/api/addbookHistory',(req,res)=>{
+//   const bookId = req.body.bookId;
+//   var sql = `CREATE TABLE {bookId} (sl INT AUTO_INCREMENT PRIMARY KEY,userId VARCHAR(255))`;
+//   mysqlConnection.query(sql, [data], function (err, result) {
+//     if (err) throw err;
+//     res.status(201).json({
+//       message:"success"
+//     });  
+//   });
+// });
 
 //Get books form database
 app.post('/api/getBooksForContributor',(req,res)=>{
@@ -354,6 +366,52 @@ app.post('/api/getBooksPerLanguage',(req,res)=>{
       books = []
       });
 });
+
+
+app.post('/api/likeBook',(req,res)=>{
+  const book = req.body;
+  var data = []
+  data.push(book.userId)
+  data.push(book.bookId)
+  data.push(book.bookName)
+  console.log(data)
+  try {
+    var sql = "INSERT INTO `user-liked-book-table` (userId,bookId,bookName) VALUES (?)";
+    mysqlConnection.query(sql, [data], function (err, result) {
+      //if (err) throw err;
+      res.status(201).json({
+        message:"success"
+      });  
+    }); 
+  } catch (error) {
+  }
+});
+
+
+//Create dynamic table for history
+app.post('/api/createHistoryTableForBook',(req,res)=>{
+  bookId = req.body.bookId
+  var sql = "CREATE TABLE `"+ bookId + "` (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), address VARCHAR(255))";
+  mysqlConnection.query(sql, function (err, result) {
+    if (err) throw err;
+    res.status(201).json({
+      message:"success"
+    });  
+  });
+});
+
+//Test to create dynamic for content
+app.post('/api/createHistoryTableForBook',(req,res)=>{
+  bookId = req.body.bookId+"-content"
+  var sql = "CREATE TABLE `"+ bookId + "` (id INT AUTO_INCREMENT PRIMARY KEY, paragraphId VARCHAR(255),paragraphLink VARCHAR(255)";
+  mysqlConnection.query(sql, function (err, result) {
+    if (err) throw err;
+    res.status(201).json({
+      message:"success"
+    });  
+  });
+}
+);
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{
