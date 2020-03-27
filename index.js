@@ -401,17 +401,16 @@ app.post('/api/createHistoryTableForBook',(req,res)=>{
 });
 
 //Test to create dynamic for content
-app.post('/api/createHistoryTableForBook',(req,res)=>{
-  bookId = req.body.bookId+"-content"
-  var sql = "CREATE TABLE `"+ bookId + "` (id INT AUTO_INCREMENT PRIMARY KEY, paragraphId VARCHAR(255),paragraphLink VARCHAR(255)";
+app.post('/api/createDataTableForBook',(req,res)=>{
+  bookId = req.body.bookId+"-content";
+  var sql = "CREATE TABLE `"+ bookId + "` (sl INT AUTO_INCREMENT PRIMARY KEY, paragraphId VARCHAR(255),paragraphLink VARCHAR(255))";
   mysqlConnection.query(sql, function (err, result) {
     if (err) throw err;
     res.status(201).json({
       message:"success"
     });  
   });
-}
-);
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{
