@@ -2,6 +2,7 @@ const mysql = require('mysql');
 const express = require('express')
 const bodyparser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
 
 const app = express()
  
@@ -410,6 +411,11 @@ app.post('/api/createDataTableForBook',(req,res)=>{
       message:"success"
     });  
   });
+});
+
+//Add paragraph
+app.post('/api/addParagraph',(req,res)=>{
+  console.log(req.body)
 });
 
 const port = process.env.PORT || 3000;
