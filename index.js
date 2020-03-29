@@ -4,6 +4,13 @@ const bodyparser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
+// const storage = multer.diskStorage({
+//   destination:'./AudioFiles',
+//   filename: function(req,file,cb){
+//     cb(null,file.filename+'-'+Date.now()+path.extname(file.originalname));
+//   }
+// });
+
 const app = express()
  
 app.use(bodyparser.json());
