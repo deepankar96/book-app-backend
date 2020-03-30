@@ -4,12 +4,15 @@ const bodyparser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
+var filenameForAudioFile;
+
 const audioStorage = multer.diskStorage({
   destination:'./AudioFiles',
   filename: function(req,file,cb){
-    const name = file.originalname.toLowerCase().split(' ').join('-');
+    const name = file.originalname.toLowerCase().split('.')[0].split(' ').join('-');
     const ext = file.mimetype.split('/')[1]
-    cb(null,name+'-'+Date.now()+'.'+ext);
+    filenameForAudioFile =name+'-'+Date.now()+'.'+ext; 
+    cb(null,filenameForAudioFile);
   }
 });
 const audioUpload = multer({storage:audioStorage})
@@ -233,7 +236,14 @@ app.post('/api/createDataTableForBook',(req,res)=>{
 
 //Add paragraph
 app.post('/api/addParagraph',audioUpload.single('paragraphAudio'),(req,res)=>{
-  console.log(req.file)
+  var paragraphDetails = req.body;
+  var bookId = req.body.bookId
+  console.log(bookId)
+  var data = []
+  data.push(paragraphDetails.paragraphNumber);
+  data.push(paragraphDetails.paragraphTitle);
+  data.push(filenameForAudioFile);
+  console.log(data)
   res.status(201).json({
     message:"success"
   });
