@@ -8,13 +8,12 @@ const audioStorage = multer.diskStorage({
   destination:'./AudioFiles',
   filename: function(req,file,cb){
     const name = file.originalname.toLowerCase().split(' ').join('-');
-    const ext = "jpg"
+    const ext = file.mimetype.split('/')[1]
     cb(null,name+'-'+Date.now()+'.'+ext);
   }
 });
 const audioUpload = multer({storage:audioStorage})
 
-const upload = multer({dest:'./AudioFiles'});
 
 const app = express()
  
@@ -234,7 +233,7 @@ app.post('/api/createDataTableForBook',(req,res)=>{
 
 //Add paragraph
 app.post('/api/addParagraph',audioUpload.single('paragraphAudio'),(req,res)=>{
-  console.log(req)
+  console.log(req.file)
   res.status(201).json({
     message:"success"
   });
