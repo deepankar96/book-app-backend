@@ -4,12 +4,14 @@ const bodyparser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
-// const storage = multer.diskStorage({
-//   destination:'./AudioFiles',
-//   filename: function(req,file,cb){
-//     cb(null,file.filename+'-'+Date.now()+path.extname(file.originalname));
-//   }
-// });
+const audioStorage = multer.diskStorage({
+  destination:'./AudioFiles',
+  filename: function(req,file,cb){
+    const name = file.originalname.toLowerCase().split(' ').join('-');
+    const ext = "mp3"
+    cb(null,name+'-'+Date.now()+'.'+ext);
+  }
+});
 
 const app = express()
  
@@ -314,17 +316,6 @@ app.post('/api/addbook',(req,res)=>{
   });
 });
 
-//Create book history to database
-// app.post('/api/addbookHistory',(req,res)=>{
-//   const bookId = req.body.bookId;
-//   var sql = `CREATE TABLE {bookId} (sl INT AUTO_INCREMENT PRIMARY KEY,userId VARCHAR(255))`;
-//   mysqlConnection.query(sql, [data], function (err, result) {
-//     if (err) throw err;
-//     res.status(201).json({
-//       message:"success"
-//     });  
-//   });
-// });
 
 //Get books form database
 app.post('/api/getBooksForContributor',(req,res)=>{
@@ -421,7 +412,7 @@ app.post('/api/createDataTableForBook',(req,res)=>{
 });
 
 //Add paragraph
-app.post('/api/addParagraph',(req,res)=>{
+app.post('/api/addParagraph',multer({storage:audioStorage}).single("pragraphAudio"),(req,res)=>{
   console.log(req.body)
 });
 
