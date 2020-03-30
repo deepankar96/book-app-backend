@@ -238,15 +238,20 @@ app.post('/api/createDataTableForBook',(req,res)=>{
 app.post('/api/addParagraph',audioUpload.single('paragraphAudio'),(req,res)=>{
   var paragraphDetails = req.body;
   var bookId = req.body.bookId
-  console.log(bookId)
   var data = []
   data.push(paragraphDetails.paragraphNumber);
   data.push(paragraphDetails.paragraphTitle);
   data.push(filenameForAudioFile);
-  console.log(data)
-  res.status(201).json({
-    message:"success"
-  });
+  try {
+    var sql = "INSERT INTO `"+bookId+"-content"+"` (paragraphNumber,paragraphTitle,paragraphLink) VALUES (?)";
+    mysqlConnection.query(sql, [data], function (err, result) {
+      //if (err) throw err;
+      res.status(201).json({
+        message:"success"
+      });  
+    }); 
+  } catch (error) {
+  }
 });
 
 const port = process.env.PORT || 3000;
