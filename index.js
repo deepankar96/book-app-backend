@@ -227,7 +227,7 @@ app.post('/api/createHistoryTableForBook',(req,res)=>{
 //Test to create dynamic for content
 app.post('/api/createDataTableForBook',(req,res)=>{
   bookId = req.body.bookId+"-content";
-  var sql = "CREATE TABLE `"+ bookId + "` (sl INT AUTO_INCREMENT PRIMARY KEY, paragraphId VARCHAR(255),paragraphLink VARCHAR(255))";
+  var sql = "CREATE TABLE `"+ bookId + "` (sl INT AUTO_INCREMENT PRIMARY KEY, paragraphNumber VARCHAR(255),paragraphLink VARCHAR(255),paragraphTitle VARCHAR(255))";
   mysqlConnection.query(sql, function (err, result) {
     if (err) throw err;
     res.status(201).json({
@@ -261,23 +261,28 @@ app.post('/api/getParagraphsForBooks',(req,res)=>{
   bookId = req.body.bookId;
   paragraphs=[];
   var sql = "SELECT * FROM `" + bookId + "-content` ORDER BY `paragraphNumber` ASC";
-        mysqlConnection.query(sql, (err,rows) => {
-        if(err) throw err;
-        for(row of rows){
-          const paragraph ={
-            paragraphNumber:row.paragraphNumber,
-            paragraphLink:row.paragraphLink,
-            paragraphTitle:row.paragraphTitle,
-            }
-        paragraphs.push(paragraph)
-        }
-      res.status(200).json({
-        message:"successfull",
-        post:paragraphs
+  try {
+    mysqlConnection.query(sql, (err,rows) => {
+      if(err) throw err;
+      for(row of rows){
+        const paragraph ={
+          paragraphNumber:row.paragraphNumber,
+          paragraphLink:row.paragraphLink,
+          paragraphTitle:row.paragraphTitle,
+          }
+      paragraphs.push(paragraph)
       }
-      );
-      books = []
-      });
+      console.log(paragraphs)
+    res.status(200).json({
+      message:"successfull",
+      post:paragraphs
+    }
+    );
+    paragraphs = []
+    }); 
+  } catch (error) {
+    
+  }
 });
 
 const port = process.env.PORT || 3000;
