@@ -3,6 +3,7 @@ const express = require('express')
 const bodyparser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const path = require('path');
 
 var filenameForAudioFile;
 
@@ -22,6 +23,7 @@ const app = express()
  
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
+app.use("/AudioFiles",express.static(__dirname + '/AudioFiles'));
 
 var mysqlConnection = mysql.createConnection({
   host: 'localhost',
@@ -253,6 +255,29 @@ app.post('/api/addParagraph',audioUpload.single('paragraphAudio'),(req,res)=>{
   } catch (error) {
     
   }
+});
+
+app.post('/api/getParagraphsForBooks',(req,res)=>{
+  bookId = req.body.bookId;
+  paragraphs=[];
+  var sql = "SELECT * FROM `" + bookId + "-content` ORDER BY `paragraphNumber` ASC";
+        mysqlConnection.query(sql, (err,rows) => {
+        if(err) throw err;
+        for(row of rows){
+          const paragraph ={
+            paragraphNumber:row.paragraphNumber,
+            paragraphLink:row.paragraphLink,
+            paragraphTitle:row.paragraphTitle,
+            }
+        paragraphs.push(paragraph)
+        }
+      res.status(200).json({
+        message:"successfull",
+        post:paragraphs
+      }
+      );
+      books = []
+      });
 });
 
 const port = process.env.PORT || 3000;
