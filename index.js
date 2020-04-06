@@ -169,6 +169,7 @@ app.post('/api/getBooksForContributor',(req,res)=>{
             bookId:row.bookId,
             bookName:row.bookName,
             bookLanguage:row.bookLanguage,
+            viewCount:row.viewCount,
             }
         books.push(book);
         }
@@ -198,6 +199,7 @@ app.post('/api/getBooksPerLanguage',(req,res)=>{
             bookId:row.bookId,
             bookName:row.bookName,
             bookLanguage:row.bookLanguage,
+            viewCount:row.viewCount,
             }
         books.push(book);
         }
@@ -344,6 +346,7 @@ app.post('/api/signupUser',(req,res)=>{
 });
 //Manage View Counts
 app.post('/api/updateViewCount',(req,res)=>{
+  try {
   const bookId = req.body.bookId;
   var sql = "UPDATE `book-list-table` SET `viewCount` = `viewCount`+ 1 WHERE bookId = ? ";
   mysqlConnection.query(sql,[bookId], function (err, result) {
@@ -352,6 +355,9 @@ app.post('/api/updateViewCount',(req,res)=>{
       message:"success",
     });  
   });
+} catch (error) {
+    
+}
 });
 
 
