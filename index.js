@@ -326,8 +326,32 @@ catch(error){
 }
 });
 
+//Sign up Users
 app.post('/api/signupUser',(req,res)=>{
-  console.log(req.body)
+    const user = req.body;
+    var data = []
+    data.push(user.userId)
+    data.push(user.userPassword)
+    data.push(user.userName)
+    var sql = "INSERT INTO `user-login-table` (userId,userPassword,userName) VALUES (?)";
+    mysqlConnection.query(sql, [data], function (err, result) {
+      if (err) throw err;
+      res.status(201).json({
+        message:"success",
+        userId:user.userId,
+      });  
+    });
+});
+//Manage View Counts
+app.post('/api/updateViewCount',(req,res)=>{
+  const bookId = req.body.bookId;
+  var sql = "UPDATE `book-list-table` SET `viewCount` = `viewCount`+ 1 WHERE bookId = ? ";
+  mysqlConnection.query(sql,[bookId], function (err, result) {
+    if (err) throw err;
+    res.status(201).json({
+      message:"success",
+    });  
+  });
 });
 
 
