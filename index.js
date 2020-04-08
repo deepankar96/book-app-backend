@@ -18,12 +18,24 @@ const audioStorage = multer.diskStorage({
 });
 const audioUpload = multer({storage:audioStorage})
 
+const coverImageStorage = multer.diskStorage({
+  destination:'./BookCoverImages',
+  filename: function(req,file,cb){
+    const name = file.originalname.toLowerCase().split('.')[0].split(' ').join('-');
+    const ext = file.mimetype.split('/')[1]
+    filenameForImageFile =name+'-'+Date.now()+'.'+ext; 
+    cb(null,filenameForImageFile);
+  }
+});
+const ImageUpload = multer({storage:coverImageStorage})
+
 
 const app = express()
  
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
 app.use("/AudioFiles",express.static(__dirname + '/AudioFiles'));
+app.use("/BookCoverImages",express.static(__dirname + '/BookCoverImages'));
 
 var mysqlConnection = mysql.createConnection({
   host: 'localhost',
@@ -365,5 +377,5 @@ const port = process.env.PORT || 3000;
 app.listen(port,()=>{
     console.log(`Listening on port ${port}..`);
 })
-
+//
 
