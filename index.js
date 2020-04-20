@@ -144,8 +144,7 @@ catch(error){
 });
 
 //Add book to database
-app.post('/api/addbook',(req,res)=>{
-  try{
+app.post('/api/addbook',ImageUpload.single('bookCover'),(req,res)=>{
   const book = req.body;
   bookIdentity = book.bookId
   var data = []
@@ -161,9 +160,6 @@ app.post('/api/addbook',(req,res)=>{
       bookId:book.bookId,
     });  
   });
-}catch(error){
-
-}
 });
 
 
