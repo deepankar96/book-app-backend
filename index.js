@@ -6,6 +6,7 @@ const multer = require('multer');
 const path = require('path');
 
 var filenameForAudioFile;
+var filenameForImageFile;
 
 const audioStorage = multer.diskStorage({
   destination:'./AudioFiles',
@@ -152,7 +153,8 @@ app.post('/api/addbook',ImageUpload.single('bookCover'),(req,res)=>{
   data.push(book.bookId)
   data.push(book.bookName)
   data.push(book.bookLanguage)
-  var sql = "INSERT INTO `book-list-table` (contributorId,bookId,bookName,bookLanguage) VALUES (?)";
+  data.push(filenameForImageFile)
+  var sql = "INSERT INTO `book-list-table` (contributorId,bookId,bookName,bookLanguage,coverImage) VALUES (?)";
   mysqlConnection.query(sql, [data], function (err, result) {
     if (err) throw err;
     res.status(201).json({
@@ -168,7 +170,7 @@ app.post('/api/getBooksForContributor',(req,res)=>{
   try{
   contributorId = req.body.contributorId;
   books=[];
-  var sql = 'SELECT * FROM `book-list-table` where contributorId = ?';
+  var sql = "SELECT * FROM `book-list-table` where contributorId = ?";
         mysqlConnection.query(sql, [contributorId], (err,rows) => {
         if(err) throw err;
         for(row of rows){
@@ -198,7 +200,7 @@ app.post('/api/getBooksPerLanguage',(req,res)=>{
   try{
   Language = req.body.Language;
   books=[];
-  var sql = 'SELECT * FROM `book-list-table` where bookLanguage = ?';
+  var sql = "SELECT * FROM `book-list-table` where bookLanguage = ? and status = 'a'";
         mysqlConnection.query(sql, [Language], (err,rows) => {
         if(err) throw err;
         for(row of rows){
