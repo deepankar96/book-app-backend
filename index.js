@@ -180,6 +180,8 @@ app.post('/api/getBooksForContributor',(req,res)=>{
             bookName:row.bookName,
             bookLanguage:row.bookLanguage,
             viewCount:row.viewCount,
+            coverImage:row.coverImage,
+            status:row.status,
             }
         books.push(book);
         }
