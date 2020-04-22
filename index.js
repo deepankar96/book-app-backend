@@ -296,7 +296,7 @@ app.post('/api/addParagraph',audioUpload.single('paragraphAudio'),(req,res)=>{
   try {
     var sql = "INSERT INTO `"+bookId+"-content"+"` (paragraphNumber,paragraphTitle,paragraphLink) VALUES (?)";
     mysqlConnection.query(sql, [data], function (err, result) {
-      //if (err) throw err;
+      if (err) throw err;
       res.status(201).json({
         message:"success"
       });  
@@ -375,6 +375,7 @@ app.post('/api/updateViewCount',(req,res)=>{
 
 //Get Books for SuperAdmin
 app.get('/api/getBooksForSuperAdmin',(req,res)=>{
+  try {
   books=[];
   var sql = "SELECT * FROM `book-list-table`";
         mysqlConnection.query(sql, (err,rows) => {
@@ -397,6 +398,9 @@ app.get('/api/getBooksForSuperAdmin',(req,res)=>{
       );
       books = []
       });
+    } catch (error) {
+    
+    }
 });
 
 const port = process.env.PORT || 3000;
