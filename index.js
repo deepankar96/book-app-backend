@@ -374,7 +374,7 @@ app.post('/api/updateViewCount',(req,res)=>{
 });
 
 //Get Books for SuperAdmin
-app.get('/api/getBooksForSuperAdmin',(req,res)=>{
+app.post('/api/getBooksForSuperAdmin',(req,res)=>{
   try {
   books=[];
   var sql = "SELECT * FROM `book-list-table`";
