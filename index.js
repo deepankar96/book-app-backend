@@ -197,12 +197,13 @@ app.post('/api/getBooksForContributor',(req,res)=>{
 
     }
 });
+
 //Getting books according to the language
 app.post('/api/getBooksPerLanguage',(req,res)=>{
   try{
   Language = req.body.Language;
   books=[];
-  var sql = "SELECT * FROM `book-list-table` where bookLanguage = ? and status = 'a'";
+  var sql = "SELECT * FROM `book-list-table` where bookLanguage = ? and status = 'approved'";
         mysqlConnection.query(sql, [Language], (err,rows) => {
         if(err) throw err;
         for(row of rows){
@@ -372,6 +373,31 @@ app.post('/api/updateViewCount',(req,res)=>{
 }
 });
 
+//Get Books for SuperAdmin
+app.get('/api/getBooksForSuperAdmin',(req,res)=>{
+  books=[];
+  var sql = "SELECT * FROM `book-list-table`";
+        mysqlConnection.query(sql, (err,rows) => {
+        if(err) throw err;
+        for(row of rows){
+          const book ={
+            contributorId:row.contributorId,
+            bookId:row.bookId,
+            bookName:row.bookName,
+            bookLanguage:row.bookLanguage,
+            viewCount:row.viewCount,
+            status:row.status,
+            }
+        books.push(book);
+        }
+      res.status(200).json({
+        message:"successfull",
+        post:books,
+      }
+      );
+      books = []
+      });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{
