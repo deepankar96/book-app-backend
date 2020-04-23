@@ -374,7 +374,7 @@ app.post('/api/updateViewCount',(req,res)=>{
 });
 
 //Get Books for SuperAdmin
-app.post('/api/getBooksForSuperAdmin',(req,res)=>{
+app.get('/api/getBooksForSuperAdmin',(req,res)=>{
   try {
   books=[];
   var sql = "SELECT * FROM `book-list-table`";
@@ -388,6 +388,8 @@ app.post('/api/getBooksForSuperAdmin',(req,res)=>{
             bookLanguage:row.bookLanguage,
             viewCount:row.viewCount,
             status:row.status,
+            coverImage:row.coverImage,
+            contributorId:row.contributorId
             }
         books.push(book);
         }
