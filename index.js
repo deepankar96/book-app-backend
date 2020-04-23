@@ -408,16 +408,15 @@ app.get('/api/getBooksForSuperAdmin',(req,res)=>{
 //Change status of Books
 app.post('/api/updateStatus',(req,res)=>{
   try {
-    console.log(req.body)
-  // const bookId = req.body.bookId;
-  // const status = req.body.status;
-  // var sql = "UPDATE `book-list-table` SET `status` = ? WHERE bookId = ? ";
-  // mysqlConnection.query(sql,[status,bookId], function (err, result) {
-  //   if (err) throw err;
-  //   res.status(201).json({
-  //     message:"success",
-  //   });  
-  // });
+  const bookId = req.body.bookId;
+  const status = req.body.status;
+  var sql = "UPDATE `book-list-table` SET `status` = ? WHERE bookId = ? ";
+  mysqlConnection.query(sql,[status,bookId], function (err, result) {
+    if (err) throw err;
+    res.status(201).json({
+      message:"success",
+    });  
+  });
 } catch (error) {
     
 }
