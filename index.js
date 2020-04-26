@@ -154,7 +154,8 @@ app.post('/api/addbook',ImageUpload.single('bookCover'),(req,res)=>{
   data.push(book.bookName)
   data.push(book.bookLanguage)
   data.push(filenameForImageFile)
-  var sql = "INSERT INTO `book-list-table` (contributorId,bookId,bookName,bookLanguage,coverImage) VALUES (?)";
+  data.push('waiting')
+  var sql = "INSERT INTO `book-list-table` (contributorId,bookId,bookName,bookLanguage,coverImage,status) VALUES (?)";
   mysqlConnection.query(sql, [data], function (err, result) {
     if (err) throw err;
     res.status(201).json({
