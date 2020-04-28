@@ -423,6 +423,22 @@ app.post('/api/updateStatus',(req,res)=>{
 }
 });
 
+app.post('/api/addBookToHistory',(req,res)=>{
+  try {
+    userId = req.body.userId;
+    bookId = req.body.bookId;
+    var sql = "INSERT INTO `" + userId + "` (bookId) VALUES (?)"
+    mysqlConnection.query(sql, [bookId], function (err, result) {
+      if (err) throw err;
+      res.status(201).json({
+        message:"success",
+      });  
+    });
+
+  } catch (error) {
+    
+  }
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{
