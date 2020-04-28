@@ -257,9 +257,9 @@ catch(error){
 
 
 //Create dynamic table for history
-app.post('/api/createHistoryTableForBook',(req,res)=>{
-  bookId = req.body.bookId
-  var sql = "CREATE TABLE `"+ bookId + "` (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), address VARCHAR(255))";
+app.post('/api/createHistoryTableForUser',(req,res)=>{
+  UserId = req.body.userId+"-history"
+  var sql = "CREATE TABLE `"+ UserId + "` (id INT AUTO_INCREMENT PRIMARY KEY, bookId VARCHAR(255))";
   mysqlConnection.query(sql, function (err, result) {
     if (err) throw err;
     res.status(201).json({
