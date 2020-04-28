@@ -214,6 +214,7 @@ app.post('/api/getBooksPerLanguage',(req,res)=>{
             bookName:row.bookName,
             bookLanguage:row.bookLanguage,
             viewCount:row.viewCount,
+            coverImage:row.coverImage,
             }
         books.push(book);
         }
@@ -438,6 +439,58 @@ app.post('/api/addBookToHistory',(req,res)=>{
   } catch (error) {
     
   }
+});
+
+app.post('/api/viewBookToHistory',(req,res)=>{
+  userId = req.body.userId+"-history"
+  books=[]
+  var sql = "SELECT * FROM `" + userId +"`";
+  mysqlConnection.query(sql, (err,rows) => {
+    if(err) throw err;
+    for(row of rows){
+      books.push(row.bookId)
+    }
+    res.status(201).json({
+      message:"success",
+      post:books,
+    });
+  })
+});
+
+app.get('/api/viewUsers',(req,res)=>{
+  users=[]
+  var sql = "SELECT * FROM `user-login-table`";
+  mysqlConnection.query(sql, (err,rows) => {
+    if(err) throw err;
+    for(row of rows){
+      user = []
+      user.push(row.userId)
+      user.push(row.userName)
+      users.push(user)
+    }
+    res.status(201).json({
+      message:"success",
+      post:users,
+    });
+  })
+});
+
+app.get('/api/viewContributors',(req,res)=>{
+  contributors=[]
+  var sql = "SELECT * FROM `contributor-login-table`";
+  mysqlConnection.query(sql, (err,rows) => {
+    if(err) throw err;
+    for(row of rows){
+      contributor = []
+      contributor.push(row.contributorId)
+      contributor.push(row.status)
+      contributors.push(contributor)
+    }
+    res.status(201).json({
+      message:"success",
+      post:contributors,
+    });
+  })
 });
 
 const port = process.env.PORT || 3000;
