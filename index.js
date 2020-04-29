@@ -109,6 +109,23 @@ app.post('/api/contributorLogin',(req,res,next)=>{
   }
 });
 
+
+//Add contributors
+app.post('/api/addContributor',(req,res,next)=>{
+  var data = [];
+  data.push(req.body.contributorId)
+  data.push(req.body.contributorPassword)
+  data.push('active')
+  var sql = "INSERT INTO `contributor-login-table` (contributorId,contributorPassword,status) VALUES (?)";
+  mysqlConnection.query(sql, [data], function (err, result) {
+    if (err) throw err;
+    res.status(201).json({
+      message:"success",
+      contributorId:req.body.contributorId,
+    });  
+  });
+});
+
 //Login as a User
 app.post('/api/userLogin',(req,res,next)=>{
   try{
@@ -424,6 +441,7 @@ app.post('/api/updateStatus',(req,res)=>{
 }
 });
 
+//Maintaining user book history
 app.post('/api/addBookToHistory',(req,res)=>{
   try {
     userId = req.body.userId;
@@ -458,6 +476,7 @@ app.post('/api/viewBookToHistory',(req,res)=>{
   })
 });
 
+//superadmin code to view all the users
 app.get('/api/viewUsers',(req,res)=>{
   users=[]
   var sql = "SELECT * FROM `user-login-table`";
@@ -476,6 +495,7 @@ app.get('/api/viewUsers',(req,res)=>{
   })
 });
 
+//superadmin code to view all the contributors
 app.get('/api/viewContributors',(req,res)=>{
   contributors=[]
   var sql = "SELECT * FROM `contributor-login-table`";
