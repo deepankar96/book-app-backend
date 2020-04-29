@@ -441,6 +441,7 @@ app.post('/api/addBookToHistory',(req,res)=>{
   }
 });
 
+//To view all the people that have viewed a book
 app.post('/api/viewBookToHistory',(req,res)=>{
   userId = req.body.userId+"-history"
   books=[]
