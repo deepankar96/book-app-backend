@@ -513,7 +513,87 @@ app.get('/api/viewContributors',(req,res)=>{
     });
   })
 });
+//*
 
+//Get All Languages
+app.get('/api/getLanguages',(req,res)=>{
+  languages=[]
+  var sql = "SELECT * FROM `language-list-table`";
+  mysqlConnection.query(sql, (err,rows) => {
+    if(err) throw err;
+    for(row of rows){
+      languages.push(row.languageName)
+    }
+    res.status(201).json({
+      message:"success",
+      post:languages,
+    });
+  })
+});
+
+app.post('/api/addLanguage',(req,res)=>{
+  language = req.body.languageName
+  try {
+  var sql = "INSERT IGNORE INTO `language-list-table` (languageName) VALUES (?)";
+    mysqlConnection.query(sql, [language], function (err, result) {
+      if (err) throw err;
+      res.status(201).json({
+        message:"success",
+      });  
+    });
+  } catch (error) {
+    
+  }
+});
+
+//Create table for languages to add genres and types
+app.post('/api/createDataTableForLanguage',(req,res)=>{
+  try{
+  language = req.body.languageName+"-content-language";
+  var sql = "CREATE TABLE `"+ language + "` (sl INT AUTO_INCREMENT PRIMARY KEY, genre VARCHAR(255),type VARCHAR(255))";
+  mysqlConnection.query(sql, function (err, result) {
+    if (err) throw err;
+    res.status(201).json({
+      finalMessage:"Language Added Successfully"
+    });  
+  });
+}
+catch(error){
+
+}
+});
+
+//Get genres
+app.get('/api/getGenres',(req,res)=>{
+  genres=[]
+  var sql = "SELECT * FROM `genre-table`";
+  mysqlConnection.query(sql, (err,rows) => {
+    if(err) throw err;
+    for(row of rows){
+      genres.push(row.genre)
+    }
+    res.status(201).json({
+      message:"success",
+      post:genres,
+    });
+  })
+});
+
+//Get types
+app.get('/api/getTypes',(req,res)=>{
+  types=[]
+  var sql = "SELECT * FROM `type-table`";
+  mysqlConnection.query(sql, (err,rows) => {
+    if(err) throw err;
+    for(row of rows){
+      types.push(row.type)
+    }
+    res.status(201).json({
+      message:"success",
+      post:types,
+    });
+  })
+});
 const port = process.env.PORT || 3000;
 app.listen(port,()=>{
     console.log(`Listening on port ${port}..`);
