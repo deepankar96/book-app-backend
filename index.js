@@ -564,6 +564,7 @@ catch(error){
 });
 
 //Get genres
+//
 app.get('/api/getGenres',(req,res)=>{
   genres=[]
   var sql = "SELECT * FROM `genre-table`";
