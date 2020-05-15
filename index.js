@@ -329,6 +329,7 @@ catch(error){
 }
 });
 
+//Get paragraphs
 app.post('/api/getParagraphsForBooks',(req,res)=>{
   try{
   bookId = req.body.bookId;
