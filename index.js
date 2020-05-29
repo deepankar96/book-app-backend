@@ -4,8 +4,8 @@ const bodyparser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
-/
-var filenameForAudioFile;
+
+/var filenameForAudioFile;
 var filenameForImageFile;
 
 const audioStorage = multer.diskStorage({
